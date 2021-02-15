@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import '../models/photo.dart';
+import 'package:test_application/models/photo.dart';
+import 'package:test_application/screens/photo_full.dart';
+import 'package:test_application/widgets/image.dart';
 
-class PhotoCard extends StatelessWidget {
-  const PhotoCard({Key key, @required this.photo}) : super(key: key);
+class MyPhotoCard extends StatelessWidget {
+  const MyPhotoCard({Key key, @required this.photo}) : super(key: key);
 
   final Photo photo;
 
@@ -13,13 +14,16 @@ class PhotoCard extends StatelessWidget {
       semanticContainer: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: InkWell(
-        onTap: () => null,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PhotoFull(),
+            settings: RouteSettings(arguments: photo),
+          ),
+        ),
         child: Column(children: [
-          CachedNetworkImage(
-            fit: BoxFit.fill,
-            imageUrl: photo.urlSmall,
-            placeholder: (context, url) => CircularProgressIndicator(),
-            errorWidget: (context, url, error) => Icon(Icons.error),
+          MyImage(
+            url: photo.urlSmall,
           ),
           ListTile(
             title: Text(
