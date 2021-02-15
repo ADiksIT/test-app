@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_application/models/photo.dart';
 import 'package:test_application/services/api.dart';
 import 'package:test_application/widgets/photo_card.dart';
+import 'photo_full.dart';
 
 class MyHomePage extends StatefulWidget {
   final String title;
@@ -21,6 +22,22 @@ class _MyHomePageState extends State<MyHomePage> {
     _images = fetchImages();
   }
 
+  ListView _buildList(BuildContext context, List<Photo> photos) {
+    return ListView.builder(
+      itemCount: photos.length,
+      itemBuilder: (ctx, index) => MyPhotoCard(
+        photo: photos[index],
+        onTapCard: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PhotoFull(),
+            settings: RouteSettings(arguments: photos[index]),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
         future: _images,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (ctx, index) =>
-                  MyPhotoCard(photo: snapshot.data[index]),
-            );
+            return _buildList(context, snapshot.data);
           }
           if (snapshot.hasError) {
             return Text('The fetching of photos ended with an error');
