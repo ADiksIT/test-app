@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:test_application/models/photo.dart';
-import 'package:test_application/screens/photo_full.dart';
 import 'package:test_application/widgets/image.dart';
 
 class MyPhotoCard extends StatelessWidget {
-  const MyPhotoCard({Key key, @required this.photo}) : super(key: key);
+  const MyPhotoCard({Key key, @required this.photo, @required this.onTapCard})
+      : super(key: key);
 
   final Photo photo;
+  final VoidCallback onTapCard;
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,7 @@ class MyPhotoCard extends StatelessWidget {
       semanticContainer: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: InkWell(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PhotoFull(),
-            settings: RouteSettings(arguments: photo),
-          ),
-        ),
+        onTap: onTapCard,
         child: Column(children: [
           MyImage(
             url: photo.urlSmall,
